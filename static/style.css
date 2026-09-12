@@ -13,3 +13,4 @@
 .lifecycle .number,.lifecycle p{margin:0}.roles{display:grid;grid-template-columns:1fr 1fr;gap:0 3rem;margin-top:3rem}
 .roles>div{padding:1.5rem 0;border-top:1px solid var(--line)}dt{font-size:1.25rem;margin-bottom:.75rem}dd{margin:0;line-height:1.7;color:var(--muted)}
 @media(max-width:600px){.lifecycle li{grid-template-columns:40px 1fr;gap:.5rem 1rem}.lifecycle p{grid-column:2}.roles{grid-template-columns:1fr}nav a{font-size:.8125rem}}
+@media(max-width:600px){html[lang=ja] h1{font-size:clamp(1.5rem,7.7vw,2rem)}}
