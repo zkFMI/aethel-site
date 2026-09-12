@@ -1,0 +1,5 @@
+public/
+.codex/
+.sites-runtime/
+__pycache__/
+.DS_Store
