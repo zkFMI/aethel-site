@@ -54,7 +54,7 @@ GitHub repository: `zkFMI/aethel-site`。
 
 GitHub Actionsで公開するためCNAMEファイルは不要。
 Pages設定をDNSより先に行う。DNS変更と証明書発行には時間がかかる場合がある。
-未接続の間は `https://zkfmi.github.io/aethel-site/` が公開入口。
+独自ドメイン設定後は `https://zkfmi.github.io/aethel-site/` も独自ドメインへリダイレクトする。証明書の発行前は、HTTPSの公開確認が完了したとは扱わない。
 
 設定値の一次資料:
 [GitHub公式: Custom domain](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site)
@@ -64,3 +64,13 @@ Pages設定をDNSより先に行う。DNS変更と証明書発行には時間が
 サイトの表示・公開確認は、金融基盤の新たな統合試験ではない。
 研究結果の記述は、リンク先の実行条件・版・制限と一緒に評価する。
 会話の原文、Marcariaのアカウント情報、ログイン情報は公開物へ含めない。
+
+## 2026-09-13の実操作確認
+
+1. 公開英語ページを390px幅で開き、Explore the lifecycleをクリック。#lifecycleへ移動し債権の手順が表示された。
+2. 日本語の企業向けPoCガイドをクリックし、GitHub上のガイド本文と章見出しを確認。
+3. 独自ドメインの日本語ページを390px幅で開き、修正した見出しが2行に収まり、横幅390pxに対しscrollWidthも390pxであることを確認。実証・評価をクリックし#evaluateへ移動。PCでも両言語と下部導線を視認。
+
+確認時の配信ソース: `8b370067041478c614246b9053240ee39b435284`。
+
+DNSはPagesへ接続済み。HTTPの独自ドメインで表示確認済みだが、HTTPS証明書は未発行。HTTPS接続とサイト間リンクの受け入れは未完了。
