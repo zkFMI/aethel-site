@@ -6,7 +6,7 @@ import shutil
 
 ROOT = Path(__file__).parent
 OUT = ROOT/'public'
-BASE = (os.environ.get('SITE_URL') or 'https://zkfmi.github.io/aethel-site').rstrip('/')
+BASE = (os.environ.get('SITE_URL') or 'https://aethel.fi').rstrip('/')
 COPY = {
  'en': {
   'title':'Aethel — Programmable payment-stream receivables',

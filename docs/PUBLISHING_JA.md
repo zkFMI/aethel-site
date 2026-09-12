@@ -31,9 +31,7 @@ GitHub Actionsの終了だけでなく、配信URLを開き、画面と
 対象: `aethel.fi` / 管理サービス: Marcaria /
 GitHub repository: `zkFMI/aethel-site`。
 
-2026-09-13時点では、Marcariaのアカウント認証が未完了のため
-DNS編集が無効。aemeth.fiは登録処理中、aethel.fiは登録済みと表示された。
-ドメイン接続の完了を示す記録ではない。
+2026-09-13にMarcariaのアカウント認証を完了。aethel.fiはPagesの独自ドメインへ設定し、apex Aの4件とwww CNAMEを保存した。aemeth.fiは登録処理中のためDNS設定画面がなく、Pages URLで公開中。DNS伝播とHTTPSの確認結果は実行記録で別に扱う。
 
 1. Marcariaの確認メールでアカウント認証を完了する。
 2. 対象ドメインの登録完了と既存DNSレコードを確認する。
