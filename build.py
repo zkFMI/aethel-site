@@ -11,7 +11,7 @@ ROOT = Path(__file__).parent
 OUT = ROOT / 'public'
 BASE = (os.environ.get('SITE_URL') or 'https://aethel.fi').rstrip('/')
 ZK = 'https://zkfmi.com/'
-AEMETH = 'https://zkfmi.github.io/aemeth/'   # switch to https://aemeth.fi/ once the domain is bound and serves HTTPS
+AEMETH = 'https://aemeth.fi/'
 REPO = 'https://github.com/zkFMI/aethel'
 POC = REPO + '/blob/main/docs/ENTERPRISE_POC_JA.md'
 

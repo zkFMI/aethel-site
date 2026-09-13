@@ -28,9 +28,8 @@ a third party at runtime, there is no script, no tracking and no form.
 
 Push the reviewed source to `main`. GitHub Actions builds `public/` and deploys
 it to Pages. The served `version.txt` contains the source commit. The default
-`SITE_URL` is `https://aethel.fi`; DNS is bound, HTTPS depends on the Pages
-certificate. Links to æmeth point at `https://zkfmi.github.io/aemeth/` until
-`aemeth.fi` is bound; switch the `AEMETH` constant in `build.py` then.
+`SITE_URL` is `https://aethel.fi`; DNS, the Pages certificate and HTTPS
+enforcement are in place. Links to æmeth point at `https://aemeth.fi/`.
 
 ## Content ownership
 
