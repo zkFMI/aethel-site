@@ -1,7 +1,7 @@
 # Aethel website
 
 English and Japanese product pages for Aethel, the payment-stream receivables
-application in the zkFMI stack, published with GitHub Pages.
+application that settles on zkFMI or on an attested rail, published with GitHub Pages.
 
 ## Develop
 
@@ -36,7 +36,10 @@ enforcement are in place. Links to æmeth point at `https://aemeth.fi/`.
 Product statements follow `zkFMI/aethel` (README, the enterprise PoC guide and
 the "current limits" list on zkfmi.com). Aethel records the meaning and
 lifecycle of a receivable; cash, securities, title, identity records and
-guarantee ledgers stay in DeFMI, DeKYX and DeCCP, and the site says so.
+guarantee ledgers stay at the settlement rail and qualification port the
+deployment chooses (DeFMI, DeKYX and DeCCP on zkFMI; operator- and
+issuer-signed records on the attested rail), and the site says so. Rail
+statements follow `docs/RAIL_INDEPENDENCE_JA.md` in `zkFMI/aethel`.
 Research status and limitations must remain explicit. No unverified
 affiliations or financing offers are published. No contact email is configured
 at the user's request.

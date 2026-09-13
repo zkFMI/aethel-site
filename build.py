@@ -27,29 +27,29 @@ def wm():
 COPY = {
  'en': {
   'title': 'Aethel — the payment stream is the receivable',
-  'description': 'Aethel turns a payment stream both parties have signed into a receivable that independent credit assessors, guarantors, liquidity providers and servicers act on with separately signed authority, and settles it through a pluggable settlement rail, zkFMI first, without holding the cash.',
-  'nav': [('product', 'Product'), ('lifecycle', 'Lifecycle'), ('providers', 'Providers'), ('boundaries', 'Boundaries'), ('pilot', 'Pilot'), ('status', 'Status')],
-  'eyebrow': 'Aethel · a zkFMI application', 'by': 'by æmeth',
+  'description': 'Aethel turns a payment stream both parties have signed into a receivable that independent credit assessors, guarantors, liquidity providers and servicers act on with separately signed authority, and settles it through a settlement rail it does not own, zkFMI or any system that returns signed attestations, without holding the cash.',
+  'nav': [('product', 'Product'), ('lifecycle', 'Lifecycle'), ('providers', 'Providers'), ('boundaries', 'Boundaries'), ('rails', 'Rails'), ('pilot', 'Pilot'), ('status', 'Status')],
+  'eyebrow': 'Aethel · payment-stream receivables', 'by': 'by æmeth',
   'h1': 'The payment stream is the receivable.',
-  'lede': 'Aethel takes a payment stream that both parties have signed and turns it into a receivable that independent credit assessors, guarantors, liquidity providers and servicers can act on, each with its own signed authority. It settles through a pluggable settlement rail, zkFMI being the first, and never holds the cash.',
+  'lede': 'Aethel takes a payment stream that both parties have signed and turns it into a receivable that independent credit assessors, guarantors, liquidity providers and servicers can act on, each with its own signed authority. It settles through a settlement rail it does not own, zkFMI or any system that returns signed attestations, and never holds the cash.',
   'cta': 'See the lifecycle', 'cta2': 'Enterprise PoC guide',
   'side_b': 'Built for the teams who run origination, credit, funding and servicing.',
   'side': 'Nothing here is a marketplace or a lender. Aethel is the state machine those teams plug their own providers into, and the record they can audit afterwards.',
-  'hero_note': ['Rust state machine', '12 crates', 'Research implementation', 'Not audited'],
+  'hero_note': ['Rust state machine', '13 crates', 'zkFMI or attested rail', 'Research implementation', 'Not audited'],
   'dg': {
     'stream_lbl': 'SIGNED PAYMENT STREAM', 'stream_id': 'strm-8f2c · v3', 'stream_sig': 'signed: obligor · creditor', 'stream_att': 'attested by StreamAttestor',
     'ticks': ['M+1', 'M+2', 'M+3', 'M+4', 'M+5', 'M+6'],
-    'rcv_lbl': 'RECEIVABLE', 'rcv_id': 'rcv-0142 · series S-07', 'rcv_pol': 'policy: guarantee required · DeKYX qualification',
-    'att': [('CreditDecision', 'signed · valid to 2026-10-01', 'CreditAssessor'), ('GuaranteeCommitment', 'committed · amount confidential', 'Guarantor · DeCCP hold'), ('FundingQuote', 'accepted', 'LiquidityProvider')],
-    'set_lbl': 'SETTLEMENT', 'set_1': 'zkPI instruction', 'set_1b': 'typed · nullifier · proof', 'set_2': 'DeFMI settles', 'set_2b': 'both legs, or neither',
-    'set_ev': 'evidence validated by host', 'set_state': 'Aethel state → Issued',
-    'out_paid': 'paid → Closed', 'out_def': 'default → GuaranteeClaim → DeCCP',
-    'cap': 'One receivable, four signatures from four providers, one settlement. Aethel keeps the meaning; DeFMI moves the value.',
+    'rcv_lbl': 'RECEIVABLE', 'rcv_id': 'rcv-0142 · series S-07', 'rcv_pol': 'policy: guarantee required · qualification via port',
+    'att': [('CreditDecision', 'signed · valid to 2026-10-01', 'CreditAssessor'), ('GuaranteeCommitment', 'committed · amount confidential', 'Guarantor · rail hold'), ('FundingQuote', 'accepted', 'LiquidityProvider')],
+    'set_lbl': 'SETTLEMENT RAIL', 'set_1': 'Issuance witness', 'set_1b': 'zkPI instruction, or signed attestation', 'set_2': 'The rail settles', 'set_2b': 'DeFMI, or the operator’s ledger',
+    'set_ev': 'evidence verified through the port', 'set_state': 'Aethel state → Issued',
+    'out_paid': 'paid → Closed', 'out_def': 'default → GuaranteeClaim → rail',
+    'cap': 'One receivable, four signatures from four providers, one settlement. Aethel keeps the meaning; the rail moves the value.',
   },
   'dg_list': [
     ('Signed payment stream', 'Both parties sign the schedule and terms; an attestor confirms it. Every update is a new version.'),
     ('Receivable', 'A series policy admits the stream. A credit decision, a guarantee and a funding quote attach, each signed by a different provider and bound to this receivable only.'),
-    ('Settlement', 'Issuance becomes a typed zkPI instruction. DeFMI settles it and Aethel records the evidence. Paid closes it; default binds a guarantee claim.'),
+    ('Settlement', 'The rail witnesses issuance: a settled zkPI instruction on zkFMI, an operator-signed settlement on the attested rail. Aethel records the evidence. Paid closes it; default binds a guarantee claim.'),
   ],
 
   'prod_eb': 'What Aethel is', 'prod_h2': 'Not another ledger of invoices. A state machine for obligations.',
@@ -64,10 +64,10 @@ COPY = {
   'life_p': 'The core is deterministic: the same inputs always produce the same state. What makes it useful is what it rejects.',
   'stages': [
     ('01 · Register', 'Attest the stream, open a series', 'The stream attestor confirms the payment stream and its updates. A series defines which streams are eligible and under what policy.', ['unsigned stream, or a version that does not match', 'the same obligation registered twice']),
-    ('02 · Assess & cover', 'Signed decisions, committed cover', 'A credit assessor signs a decision for this receivable. A guarantor commits coverage backed by a DeCCP facility; the amount can stay confidential.', ['expired decision', 'policy requires a guarantee and none is attached', 'artifact signed under the wrong capability']),
-    ('03 · Fund & issue', 'Quotes compete, the receivable is issued', 'Liquidity providers submit executable quotes. Issuance creates a typed zkPI instruction; DeFMI settles it and Aethel records the evidence.', ['final state before settlement evidence', 'quote from an unregistered provider', 'supply above the obligation']),
+    ('02 · Assess & cover', 'Signed decisions, committed cover', 'A credit assessor signs a decision for this receivable. A guarantor commits coverage from a facility the rail vouches for: a DeCCP hold on zkFMI, an operator-signed hold on the attested rail. The amount can stay confidential.', ['expired decision', 'policy requires a guarantee and none is attached', 'artifact signed under the wrong capability']),
+    ('03 · Fund & issue', 'Quotes compete, the receivable is issued', 'Liquidity providers submit executable quotes. Issuance is witnessed by the rail, a settled zkPI instruction or a signed attestation, and Aethel records the evidence.', ['final state before settlement evidence', 'quote from an unregistered provider', 'supply above the obligation']),
     ('04 · Service', 'Evidence in, state out', 'Payment evidence, delinquency, cure and permitted servicing actions are recorded by the servicer. A retried request applies once.', ['the same settlement result applied twice', 'servicing action outside the capability']),
-    ('05 · Close or claim', 'Paid closes. Default claims.', 'A paid obligation closes the receivable. A default attestation binds evidence to a guarantee claim; loss allocation runs in DeCCP, settlement in DeFMI.', ['claim without a default attestation', 'release by an unauthorised provider']),
+    ('05 · Close or claim', 'Paid closes. Default claims.', 'A paid obligation closes the receivable. A default attestation binds evidence to a guarantee claim; the rail allocates the loss and settles it, DeCCP and DeFMI on zkFMI.', ['claim without a default attestation', 'release by an unauthorised provider']),
   ],
   'refuses': 'Refused',
   'states_lbl': 'records', 'states': ['RegisteredStream', 'ReceivableSeries', 'CreditDecision', 'GuaranteeCommitment', 'FundingQuote', 'ReceivableIssuance', 'DefaultAttestation', 'GuaranteeClaim', 'ProviderDefinition'],
@@ -75,9 +75,9 @@ COPY = {
   'prov_eb': 'Open provider model', 'prov_h2': 'Six capabilities. None implies another.',
   'prov_p': 'Providers register with narrowly scoped capabilities and sign only the artifacts they are responsible for. A credit assessment cannot quietly act as a guarantee; a guarantor cannot issue a funding quote unless separately authorised. One company may hold several capabilities, each granted and revoked on its own.',
   'mx_cols': ['Stream attestation', 'Credit decision', 'Guarantee', 'Funding quote', 'Servicing action', 'Issuer vouch'],
-  'mx_rows': [('StreamAttestor', 'attests a stream and its updates'), ('CreditAssessor', 'signs a decision for one receivable'), ('Guarantor', 'commits cover from an external facility'), ('LiquidityProvider', 'submits an executable funding quote'), ('Servicer', 'performs permitted servicing actions'), ('CredentialIssuer', 'vouches for a DeKYX issuer key, nothing else')],
+  'mx_rows': [('StreamAttestor', 'attests a stream and its updates'), ('CreditAssessor', 'signs a decision for one receivable'), ('Guarantor', 'commits cover from an external facility'), ('LiquidityProvider', 'submits an executable funding quote'), ('Servicer', 'performs permitted servicing actions'), ('CredentialIssuer', 'vouches for a qualification issuer key, nothing else')],
   'mx_cap': 'A filled dot is the only artifact that capability may sign. Everything else is refused at the state transition, not by convention.',
-  'chips': ['<b>register</b> → active → suspended → revoked', 'key rotation: old signatures stay verifiable, new ones under the retired key are refused', 'DeKYX presentation can be required before a decision or guarantee is accepted'],
+  'chips': ['<b>register</b> → active → suspended → revoked', 'key rotation: old signatures stay verifiable, new ones under the retired key are refused', 'a qualification proof, DeKYX presentation or issuer statement, can be required before a decision or guarantee is accepted'],
 
   'bd_eb': 'Where things live', 'bd_h2': 'Aethel holds the meaning. Everything else stays where it is authoritative.',
   'bd_p': 'A receivable touches money, identity, guarantees and tokens. Aethel keeps one copy of each, in the system that is the record for it, and stores only references and digests. The same balance, qualification or facility is never copied into a second ledger.',
@@ -85,26 +85,35 @@ COPY = {
   'sor': [
     ('Payment stream, series, remaining principal', '<b>Aethel</b>', 'both signatures, versions, terms, current state'),
     ('Credit decision', 'the assessor signs · <b>Aethel</b> accepts as state', 'signed decision, target, version, validity, provider reference'),
-    ('Legal name, registration number, KYB evidence', '<b>DeKYX</b> issuer', 'pseudonymous subject reference and a qualification digest'),
-    ('Guarantee facility and remaining capacity', '<b>DeCCP</b> or the guarantor', 'opaque hold id and commitment; a settlement digest on release or claim'),
+    ('Legal name, registration number, KYB evidence', '<b>Qualification port</b> · DeKYX issuer, or an attesting issuer', 'pseudonymous subject reference and a qualification digest'),
+    ('Guarantee facility and remaining capacity', '<b>Settlement rail</b> · DeCCP, or the guarantor’s operator', 'opaque backing reference and commitment; settlement evidence on release or claim'),
     ('Token holdings per holder', '<b>DeFMI</b> or another asset ledger', 'supply caps and mint/burn intents with the ledger receipt; no per-holder balances'),
-    ('Cash, securities, collateral', '<b>DeFMI</b>', 'note, lock and settlement references; the confirmed root'),
-    ('Settlement instruction', '<b>zkPI</b>', 'instruction id, nullifier, domain, proof and signature summary'),
+    ('Cash, securities, collateral', '<b>Settlement rail</b> · DeFMI, or the operator’s ledger', 'backing references and settlement evidence; the confirmed root on zkFMI'),
+    ('Settlement instruction', '<b>Settlement rail</b> · zkPI on zkFMI, a signed attestation otherwise', 'instruction id, nullifier, domain and proof digest; or the attestation digest'),
   ],
   'conf': [
-    ('Anonymous qualification', 'A series can require a DeKYX presentation before a decision or guarantee is accepted. It is bound to this domain, action, artifact statement, nonce and expiry, so a proof for one decision cannot be replayed for another. Aethel keeps only the verified subject-line binding, never a legal name.', 'blue'),
-    ('Confidential cover', 'The guarantee amount may stay confidential. Aethel and DeCCP then exchange commitments, state digests, identifiers and verified transition receipts instead of a plaintext amount.', 'amber'),
+    ('Anonymous qualification', 'A series can require a qualification through the port before a decision or guarantee is accepted: a DeKYX presentation on zkFMI, an issuer-signed statement on the attested rail. It is bound to this domain, action, artifact statement, nonce and expiry, so a proof for one decision cannot be replayed for another. Aethel keeps only the verified subject-line binding, never a legal name.', 'blue'),
+    ('Confidential cover', 'The guarantee amount may stay confidential. Aethel and the rail then exchange commitments, state digests, identifiers and verified transition receipts instead of a plaintext amount; on zkFMI that counterpart is DeCCP.', 'amber'),
     ('Settlement with evidence', 'Issuance, releases and claims are verified by the settlement rail before the book moves. On zkFMI they become typed zkPI instructions that DeFMI settles; on the attested rail an operator-signed settlement is the witness. Aethel never advances on its own say-so.', 'teal'),
   ],
+
+  'rail_eb': 'Settlement rails', 'rail_h2': 'Two ports. Two rails shipped. The business crates depend on neither.',
+  'rail_p': 'Everything Aethel does not own is reached through two ports in the core: a settlement rail that vouches for backings and witnesses issuance, release and claim, and a qualification port that says who stands behind an anonymous line. The rail is chosen per deployment. The book, the artifacts and the tests are the same on either.',
+  'ports': [('SettlementRail', 'Is this guarantee or funding backing live? Does this witness settle exactly this issuance, release or claim?'), ('QualificationPort', 'Who stands behind this anonymous line, and does the proof bind to this decision and nothing else?')],
+  'rails': [
+    ('zkFMI rail', 'aethel-defmi-host · aethel-dekyx', 'zkPI instructions settled by DeFMI, DeCCP holds for confidential cover, DeKYX presentations for anonymous qualification. Requires the hybrid signature suite, Ed25519 + ML-DSA-65.', 'blue'),
+    ('Attested rail', 'aethel-rail-attested', 'Operator-signed holds, reservations and settlements; issuer-signed qualification statements. Ed25519 only, and no zkFMI crate in its dependency graph. A conventional settlement system that can sign its records is enough.', 'teal'),
+  ],
+  'rail_chips': ['nine business crates: no zkfmi, zkpi, defmi, deccp, dekyx or qomm in the normal dependency graph', 'signatures: Ed25519 by default, hybrid behind a cargo feature', 'a series policy may restrict which kinds of obligation it finances', 'switching rails changes the host, not the book'],
 
   'pilot_eb': 'Enterprise PoC', 'pilot_h2': 'Run it with your own roles, your own keys, and the failures you expect.',
   'pilot_p': 'The PoC guide walks from a signed stream to settlement, lists the failure cases that must be refused, the evidence to keep and example acceptance criteria. Roles are separated by key even when one team plays all of them; otherwise the separation of authority cannot be tested.',
   'scen_h': 'The minimal scenario',
-  'scen': ['Create a payment stream both parties sign, with subject references instead of raw identities', 'Register credit providers: keys, qualification conditions, decision validity, model version', 'Compose the receivable: matching version, unexpired decision, guarantee where the policy requires one', 'Fund and tokenise: supply never above the obligation, no reuse of redeemed rights', 'Service and collect: retries apply once, outcomes flow to holders once', 'Settle through zkPI and DeFMI; Aethel finalises only on confirmed evidence'],
+  'scen': ['Create a payment stream both parties sign, with subject references instead of raw identities', 'Register credit providers: keys, qualification conditions, decision validity, model version', 'Compose the receivable: matching version, unexpired decision, guarantee where the policy requires one', 'Fund and tokenise: supply never above the obligation, no reuse of redeemed rights', 'Service and collect: retries apply once, outcomes flow to holders once', 'Settle through the chosen rail; Aethel finalises only on evidence the rail has verified'],
   'fail_h': 'Must be refused',
   'fail': ['financing after the credit decision expired', 'issuing a guarantee-required product without a guarantee', 'a guarantee released by an unauthorised provider', 'acquiring tokens with a revoked qualification', 'the same stream registered twice under another identifier', 'a new decision signed with a rotated-out key', 'the same settlement result received twice', 'tokens above the remaining obligation'],
   'acc_h': 'Acceptance, at minimum',
-  'acc': ['authority for credit, guarantee and funding is independent', 'a required guarantee cannot be substituted by a credit decision', 'DeKYX revocation and key rotation reach new operations', 'if zkPI or DeFMI fails, Aethel’s settlement state does not finalise', 'after a retry, one business request applies exactly once', 'every material transition audits back to the input version and signature'],
+  'acc': ['authority for credit, guarantee and funding is independent', 'a required guarantee cannot be substituted by a credit decision', 'qualification revocation and key rotation reach new operations', 'if the rail refuses or fails, Aethel’s settlement state does not finalise', 'after a retry, one business request applies exactly once', 'every material transition audits back to the input version and signature'],
   'pilot_a': 'Enterprise PoC guide (Japanese)', 'pilot_b': 'Source', 'pilot_c': 'Aethel on zkfmi.com',
 
   'st_eb': 'Status and limits', 'st_h2': 'A research implementation, with the edges marked.',
@@ -114,40 +123,41 @@ COPY = {
     'Qualification is scope-pseudonymous, not issuer-unlinkable. Cross-issuer anti-Sybil policy is a governance decision outside the crate.',
     'Guarantee claims and releases are full-cover transitions; partial cover needs an extended state model.',
     'Legal assignment, perfection, tax, accounting and bankruptcy treatment of a receivable are outside the code and specific to each deployment.',
+    'Records are at wire version 2. Earlier snapshots are refused rather than migrated, because nothing is deployed yet.',
     'Passing the build gates is not a substitute for an independent cryptographic, financial, state-machine, host and integration audit.',
   ],
-  'gates': ['cargo test --workspace --locked', 'cargo clippy --workspace --all-targets --locked -- -D warnings', 'cargo fmt --all -- --check', 'cargo build --workspace --release --locked'],
-  'gates_note': '# the four gates, on Linux with the locked dependency graph',
+  'gates': ['cargo test --workspace --locked', 'cargo clippy --workspace --all-targets --locked -- -D warnings', 'cargo fmt --all -- --check', 'cargo build --workspace --release --locked', 'cargo tree -p aethel --edges normal   # no zkfmi, zkpi, defmi, deccp, dekyx'],
+  'gates_note': '# the four gates, on Linux with the locked dependency graph · last run 2026-09-13, rust 1.97, 74 tests',
 
   'f_tag': 'Payment streams, composed.',
-  'f_note': 'Aethel is a payment-stream receivables application in the zkFMI stack, developed by',
+  'f_note': 'Aethel is a payment-stream receivables application that settles on zkFMI or on an attested rail, developed by',
   'skip': 'Skip to content', 'lang': '日本語', 'lang_href': 'ja/', 'lang_code': 'ja', 'navlabel': 'Main',
  },
  'ja': {
   'title': 'Aethel — 支払の流れが、そのまま債権になる',
-  'description': 'Aethelは、両当事者が署名した支払ストリームを債権に変え、独立した与信評価者・保証者・資金供給者・回収管理者がそれぞれ署名した権限で関わる仕組みです。決済は差し替え可能な決済レール（最初はzkFMI）で行い、Aethel自身は資金を保有しません。',
-  'nav': [('product', 'プロダクト'), ('lifecycle', '債権の流れ'), ('providers', '提供者の権限'), ('boundaries', '正本の所在'), ('pilot', '企業PoC'), ('status', '現状と限界')],
-  'eyebrow': 'Aethel · zkFMI アプリケーション', 'by': 'æmeth 開発',
+  'description': 'Aethelは、両当事者が署名した支払ストリームを債権に変え、独立した与信評価者・保証者・資金供給者・回収管理者がそれぞれ署名した権限で関わる仕組みです。決済はAethelの外にある決済レールで行います。zkFMIでも、署名付きの記録を返す通常の決済システムでも構いません。Aethel自身は資金を保有しません。',
+  'nav': [('product', 'プロダクト'), ('lifecycle', '債権の流れ'), ('providers', '提供者の権限'), ('boundaries', '正本の所在'), ('rails', '決済レール'), ('pilot', '企業PoC'), ('status', '現状と限界')],
+  'eyebrow': 'Aethel · 支払ストリーム債権', 'by': 'æmeth 開発',
   'h1': '支払の流れが、そのまま債権になる。',
-  'lede': 'Aethelは、両当事者が署名した支払ストリームを債権に変えます。独立した与信評価者・保証者・資金供給者・回収管理者が、それぞれ自分で署名した権限の範囲で関わります。決済は差し替え可能な決済レール（最初はzkFMI）で行い、Aethel自身は資金を保有しません。',
+  'lede': 'Aethelは、両当事者が署名した支払ストリームを債権に変えます。独立した与信評価者・保証者・資金供給者・回収管理者が、それぞれ自分で署名した権限の範囲で関わります。決済はAethelの外にある決済レールで行います。zkFMIでも、署名付きの記録を返す通常の決済システムでも構いません。Aethel自身は資金を保有しません。',
   'cta': '債権の流れを見る', 'cta2': '企業向けPoCガイド',
   'side_b': '債権の組成・与信・資金供給・回収を実際に担当するチームのために。',
   'side': 'ここにあるのは、マーケットプレイスでも貸し手でもありません。担当チームが自社の提供者を接続する状態機械であり、あとから監査できる記録です。',
-  'hero_note': ['Rust の状態機械', '12 クレート', '研究実装', '監査未実施'],
+  'hero_note': ['Rust の状態機械', '13 クレート', 'zkFMI または attested レール', '研究実装', '監査未実施'],
   'dg': {
     'stream_lbl': '署名済み支払ストリーム', 'stream_id': 'strm-8f2c · v3', 'stream_sig': '署名: 支払義務者 · 債権者', 'stream_att': 'StreamAttestor が証明',
     'ticks': ['M+1', 'M+2', 'M+3', 'M+4', 'M+5', 'M+6'],
-    'rcv_lbl': '債権', 'rcv_id': 'rcv-0142 · series S-07', 'rcv_pol': '方針: 保証必須 · DeKYX 資格',
-    'att': [('CreditDecision', '署名済 · 2026-10-01 まで有効', 'CreditAssessor'), ('GuaranteeCommitment', '約束済 · 金額は秘匿', 'Guarantor · DeCCP hold'), ('FundingQuote', '受諾', 'LiquidityProvider')],
-    'set_lbl': '決済', 'set_1': 'zkPI 指図', 'set_1b': '型付き · nullifier · 証明', 'set_2': 'DeFMI が決済', 'set_2b': '両方動くか、どちらも動かない',
-    'set_ev': 'ホストが証跡を検証', 'set_state': 'Aethel の状態 → Issued',
-    'out_paid': '完済 → Closed', 'out_def': '不履行 → GuaranteeClaim → DeCCP',
-    'cap': '一つの債権に、四つの提供者の四つの署名、一つの決済。Aethelは意味を持ち、DeFMIが価値を動かす。',
+    'rcv_lbl': '債権', 'rcv_id': 'rcv-0142 · series S-07', 'rcv_pol': '方針: 保証必須 · ポート経由の資格確認',
+    'att': [('CreditDecision', '署名済 · 2026-10-01 まで有効', 'CreditAssessor'), ('GuaranteeCommitment', '約束済 · 金額は秘匿', 'Guarantor · rail hold'), ('FundingQuote', '受諾', 'LiquidityProvider')],
+    'set_lbl': '決済レール', 'set_1': '発行の証跡', 'set_1b': 'zkPI 指図、または署名付き attestation', 'set_2': 'レールが決済', 'set_2b': 'DeFMI、またはオペレーターの台帳',
+    'set_ev': 'ポート経由で証跡を検証', 'set_state': 'Aethel の状態 → Issued',
+    'out_paid': '完済 → Closed', 'out_def': '不履行 → GuaranteeClaim → レール',
+    'cap': '一つの債権に、四つの提供者の四つの署名、一つの決済。Aethelは意味を持ち、レールが価値を動かす。',
   },
   'dg_list': [
     ('署名済み支払ストリーム', '両当事者が支払予定と条件に署名し、証明者が確認します。更新はすべて新しい版になります。'),
     ('債権', 'シリーズの方針がストリームを受け入れます。与信判断・保証・資金供給見積が、それぞれ別の提供者の署名付きで、この債権だけに結び付きます。'),
-    ('決済', '発行は型付きのzkPI指図になります。DeFMIが決済し、Aethelは証跡を記録します。完済で終了し、不履行なら保証請求に結び付けます。'),
+    ('決済', '発行の証跡は決済レールが出します。zkFMIでは決済済みのzkPI指図、attestedレールではオペレーター署名の決済記録です。Aethelはその証跡を記録します。完済で終了し、不履行なら保証請求に結び付けます。'),
   ],
 
   'prod_eb': 'Aethel とは', 'prod_h2': '請求書の台帳ではなく、支払義務の状態機械。',
@@ -162,10 +172,10 @@ COPY = {
   'life_p': 'コアは決定的です。同じ入力からは必ず同じ状態になります。役に立つのは、何を拒否するかが決まっているからです。',
   'stages': [
     ('01 · 登録', 'ストリームを証明し、シリーズを開く', 'ストリーム証明者が支払ストリームとその更新を確認します。シリーズが、対象となるストリームと方針を定めます。', ['署名のないストリーム、版の不一致', '同じ支払義務の二重登録']),
-    ('02 · 与信と保証', '署名付きの判断、約束された保証', '与信評価者がこの債権への判断に署名します。保証者がDeCCPの保証枠に裏付けられた保証を約束します。金額は秘匿できます。', ['期限切れの判断', '方針が保証を求めるのに保証がない', '権限の異なる署名']),
-    ('03 · 資金供給と発行', '見積が競い、債権が発行される', '資金供給者が実行可能な見積を出します。発行は型付きのzkPI指図になり、DeFMIが決済し、Aethelが証跡を記録します。', ['決済証跡より先の確定', '未登録の提供者からの見積', '支払義務を超える発行']),
+    ('02 · 与信と保証', '署名付きの判断、約束された保証', '与信評価者がこの債権への判断に署名します。保証者は、レールが裏付ける保証枠から保証を約束します。zkFMIではDeCCPのhold、attestedレールではオペレーター署名のholdです。金額は秘匿できます。', ['期限切れの判断', '方針が保証を求めるのに保証がない', '権限の異なる署名']),
+    ('03 · 資金供給と発行', '見積が競い、債権が発行される', '資金供給者が実行可能な見積を出します。発行はレールが証跡を出し（決済済みのzkPI指図、または署名付きattestation）、Aethelがそれを記録します。', ['決済証跡より先の確定', '未登録の提供者からの見積', '支払義務を超える発行']),
     ('04 · 回収管理', '証跡が入り、状態が出る', '支払証跡、延滞、解消、許可された回収操作を回収管理者が記録します。再試行された依頼は一度だけ反映されます。', ['同じ決済結果の二重反映', '権限外の回収操作']),
-    ('05 · 完済または請求', '完済なら終了。不履行なら請求。', '完済した支払義務は債権を終了します。不履行の証明が保証請求に結び付き、損失配賦はDeCCPで、決済はDeFMIで行われます。', ['不履行証明のない請求', '権限のない提供者による解放']),
+    ('05 · 完済または請求', '完済なら終了。不履行なら請求。', '完済した支払義務は債権を終了します。不履行の証明が保証請求に結び付き、損失配賦と決済はレールが行います。zkFMIではDeCCPとDeFMIです。', ['不履行証明のない請求', '権限のない提供者による解放']),
   ],
   'refuses': '拒否されるもの',
   'states_lbl': '記録', 'states': ['RegisteredStream', 'ReceivableSeries', 'CreditDecision', 'GuaranteeCommitment', 'FundingQuote', 'ReceivableIssuance', 'DefaultAttestation', 'GuaranteeClaim', 'ProviderDefinition'],
@@ -173,9 +183,9 @@ COPY = {
   'prov_eb': '開かれた提供者モデル', 'prov_h2': '六つの権限。どれも他を含意しない。',
   'prov_p': '提供者は狭く限定された権限で登録され、自分が責任を持つ成果物にだけ署名します。与信判断が黙って保証として振る舞うことはなく、保証者が別途認可なしに資金供給見積を出すこともできません。一社が複数の権限を持ってもよく、それぞれ個別に付与・失効します。',
   'mx_cols': ['ストリーム証明', '与信判断', '保証', '資金供給見積', '回収操作', '発行者の承認'],
-  'mx_rows': [('StreamAttestor', 'ストリームとその更新を証明する'), ('CreditAssessor', '一つの債権への判断に署名する'), ('Guarantor', '外部の保証枠から保証を約束する'), ('LiquidityProvider', '実行可能な資金供給見積を出す'), ('Servicer', '許可された回収操作を行う'), ('CredentialIssuer', 'DeKYXの発行者鍵を承認する。それ以外は何もしない')],
+  'mx_rows': [('StreamAttestor', 'ストリームとその更新を証明する'), ('CreditAssessor', '一つの債権への判断に署名する'), ('Guarantor', '外部の保証枠から保証を約束する'), ('LiquidityProvider', '実行可能な資金供給見積を出す'), ('Servicer', '許可された回収操作を行う'), ('CredentialIssuer', '資格確認の発行者鍵を承認する。それ以外は何もしない')],
   'mx_cap': '塗りつぶした点が、その権限で署名できる唯一の成果物です。それ以外は慣習ではなく状態遷移で拒否されます。',
-  'chips': ['<b>登録</b> → 有効 → 停止 → 失効', '鍵更新: 旧鍵の署名は検証でき、旧鍵での新しい署名は拒否', '判断や保証の受理前にDeKYXの提示を必須にできる'],
+  'chips': ['<b>登録</b> → 有効 → 停止 → 失効', '鍵更新: 旧鍵の署名は検証でき、旧鍵での新しい署名は拒否', '判断や保証の受理前に、資格の証明（DeKYXの提示、または発行者の署名付き表明）を必須にできる'],
 
   'bd_eb': '正本の所在', 'bd_h2': 'Aethelは意味を持つ。それ以外は、正本のある場所に置いたまま。',
   'bd_p': '債権には、資金・本人性・保証・トークンが関わります。Aethelはそれぞれを一箇所、正本となるシステムにだけ置き、自分は参照とダイジェストだけを保存します。同じ残高・資格・保証枠を二つ目の台帳へ複製しません。',
@@ -183,26 +193,35 @@ COPY = {
   'sor': [
     ('支払ストリーム、シリーズ、残存元本', '<b>Aethel</b>', '両当事者の署名、版、条件、現在の状態'),
     ('与信判断', '評価者が署名 · <b>Aethel</b>が状態として受理', '署名付き判断、対象、版、有効期限、提供者参照'),
-    ('法的名称、登録番号、KYB証跡', '<b>DeKYX</b> 発行者', '仮名の主体参照と資格のダイジェスト'),
-    ('保証枠と残容量', '<b>DeCCP</b> または保証者', 'opaqueなhold IDとcommitment。解放・請求時はsettlement digest'),
+    ('法的名称、登録番号、KYB証跡', '<b>資格確認ポート</b> · DeKYX発行者、または表明する発行者', '仮名の主体参照と資格のダイジェスト'),
+    ('保証枠と残容量', '<b>決済レール</b> · DeCCP、または保証者のオペレーター', 'opaqueなbacking参照とcommitment。解放・請求時はsettlement evidence'),
     ('保有者別のトークン残高', '<b>DeFMI</b> 等の外部asset ledger', '発行上限とmint/burnのintent、ledgerのreceipt。保有者別残高は持たない'),
-    ('資金、証券、担保', '<b>DeFMI</b>', 'note・lock・settlementの参照と確定root'),
-    ('決済指図', '<b>zkPI</b>', '指図ID、nullifier、domain、証明と署名の要約'),
+    ('資金、証券、担保', '<b>決済レール</b> · DeFMI、またはオペレーターの台帳', 'backing参照とsettlement evidence。zkFMIでは確定root'),
+    ('決済指図', '<b>決済レール</b> · zkFMIではzkPI、それ以外は署名付きattestation', '指図ID、nullifier、domain、証明のダイジェスト。またはattestationのダイジェスト'),
   ],
   'conf': [
-    ('匿名の資格確認', '判断や保証を受理する前に、シリーズがDeKYXの提示を必須にできます。提示はこのドメイン・行為・成果物の文・nonce・期限に結び付くので、ある判断のための証明を別の判断へ使い回せません。Aethelは検証済みの主体参照だけを持ち、法的名称は持ちません。', 'blue'),
-    ('秘匿された保証', '保証額は秘匿できます。その場合、AethelとDeCCPは平文の金額ではなく、commitment・状態ダイジェスト・識別子・検証済みの遷移receiptを交換します。', 'amber'),
+    ('匿名の資格確認', '判断や保証を受理する前に、シリーズがポート経由の資格確認を必須にできます。zkFMIではDeKYXの提示、attestedレールでは発行者の署名付き表明です。証明はこのドメイン・行為・成果物の文・nonce・期限に結び付くので、ある判断のための証明を別の判断へ使い回せません。Aethelは検証済みの主体参照だけを持ち、法的名称は持ちません。', 'blue'),
+    ('秘匿された保証', '保証額は秘匿できます。その場合、Aethelとレールは平文の金額ではなく、commitment・状態ダイジェスト・識別子・検証済みの遷移receiptを交換します。zkFMIでは相手がDeCCPです。', 'amber'),
     ('証跡と引き換えの決済', '発行・解放・請求は、Bookが動く前に決済レールが検証します。zkFMIでは型付きのzkPI指図になりDeFMIが決済し、attestedレールではオペレーターが署名した決済記録が証跡になります。Aethelが自分の判断だけで先へ進むことはありません。', 'teal'),
   ],
+
+  'rail_eb': '決済レール', 'rail_h2': '二つのポート。同梱するレールは二本。業務クレートはどちらにも依存しない。',
+  'rail_p': 'Aethelが持たないものには、コアの二つのポートを通してだけ触れます。裏付けを保証し、発行・解放・請求の証跡を出す決済レール。匿名の枠の背後に誰がいるかを答える資格確認ポート。レールは導入ごとに選び、Book・成果物・テストはどちらでも同じです。',
+  'ports': [('SettlementRail', 'この保証や資金供給の裏付けは生きているか。この証跡は、まさにこの発行・解放・請求を決済したものか。'), ('QualificationPort', 'この匿名の枠の背後に誰がいるか。証明はこの判断だけに結び付いているか。')],
+  'rails': [
+    ('zkFMI レール', 'aethel-defmi-host · aethel-dekyx', 'DeFMIが決済するzkPI指図、秘匿保証のためのDeCCP hold、匿名資格確認のためのDeKYX提示。署名はEd25519 + ML-DSA-65のhybridが必須です。', 'blue'),
+    ('attested レール', 'aethel-rail-attested', 'オペレーター署名のhold・reservation・settlementと、発行者署名の資格表明。Ed25519のみで、依存グラフにzkFMIのクレートはありません。記録に署名できる通常の決済システムがあれば足ります。', 'teal'),
+  ],
+  'rail_chips': ['業務クレート9個の通常依存グラフに zkfmi・zkpi・defmi・deccp・dekyx・qomm なし', '署名: 既定はEd25519。hybridはcargo featureで追加', 'シリーズの方針で、扱う支払義務の種類を限定できる', 'レールを替えて変わるのはホストであって、Bookではない'],
 
   'pilot_eb': '企業向けPoC', 'pilot_h2': '自社の役割と鍵で動かし、想定する失敗をぶつける。',
   'pilot_p': 'PoCガイドは、署名済みストリームから決済までの最小シナリオ、拒否されなければならない失敗系、保存すべき証拠、受入基準の例を示します。一つのチームが全役割を演じる場合でも、鍵は役割ごとに分けます。分けなければ権限分離を検証できないからです。',
   'scen_h': '最小シナリオ',
-  'scen': ['両当事者が署名する支払ストリームを作る。生の本人情報ではなく主体参照を使う', '与信事業者を登録する。鍵、資格条件、判断の有効期限、モデルの版', '債権を組成する。版の一致、期限内の判断、方針が求める保証', '資金供給とトークン化。発行総数は支払義務を超えず、償還済みの権利は再利用しない', '回収管理。再試行は一度だけ反映され、結果は保有者へ一度だけ配分される', 'zkPIとDeFMIで決済する。Aethelは確定した証跡を受けてから確定する'],
+  'scen': ['両当事者が署名する支払ストリームを作る。生の本人情報ではなく主体参照を使う', '与信事業者を登録する。鍵、資格条件、判断の有効期限、モデルの版', '債権を組成する。版の一致、期限内の判断、方針が求める保証', '資金供給とトークン化。発行総数は支払義務を超えず、償還済みの権利は再利用しない', '回収管理。再試行は一度だけ反映され、結果は保有者へ一度だけ配分される', '選んだレールで決済する。Aethelはレールが検証した証跡を受けてから確定する'],
   'fail_h': '拒否されなければならないもの',
-  'fail': ['与信判断の期限切れ後の債権化', '保証必須の商品を保証なしで発行', '権限のない事業者による保証の解除', '失効したDeKYX資格でのトークン取得', '同じストリームを別の識別子で二重登録', '更新前の鍵による新しい与信判断への署名', '同じ決済結果の二回受信', '残存する支払義務を超えるトークン発行'],
+  'fail': ['与信判断の期限切れ後の債権化', '保証必須の商品を保証なしで発行', '権限のない事業者による保証の解除', '失効した資格でのトークン取得', '同じストリームを別の識別子で二重登録', '更新前の鍵による新しい与信判断への署名', '同じ決済結果の二回受信', '残存する支払義務を超えるトークン発行'],
   'acc_h': '受入基準（最低限）',
-  'acc': ['与信・保証・資金供給の権限が独立している', '方針が求める保証を与信判断で代替できない', 'DeKYXの失効・鍵更新が新しい処理へ反映される', 'zkPIまたはDeFMIが失敗した場合、Aethelの決済状態が確定しない', '再試行後も一つの業務依頼が一度だけ反映される', 'すべての重要な状態遷移を、入力の版と署名まで遡って監査できる'],
+  'acc': ['与信・保証・資金供給の権限が独立している', '方針が求める保証を与信判断で代替できない', '資格の失効・鍵更新が新しい処理へ反映される', 'レールが拒否または失敗した場合、Aethelの決済状態が確定しない', '再試行後も一つの業務依頼が一度だけ反映される', 'すべての重要な状態遷移を、入力の版と署名まで遡って監査できる'],
   'pilot_a': '企業向けPoCガイド', 'pilot_b': 'ソースコード', 'pilot_c': 'zkfmi.com の Aethel',
 
   'st_eb': '現状と限界', 'st_h2': '研究実装。境界は明記してある。',
@@ -212,13 +231,14 @@ COPY = {
     '資格確認はスコープ内の仮名性であり、発行者間の非連結性はありません。発行者をまたぐSybil対策はクレートの外のガバナンス判断です。',
     '保証請求と解放は全額を対象とする遷移です。部分保証には拡張した状態モデルが必要です。',
     '債権譲渡の法的効力、対抗要件、税務、会計、倒産時の取扱いはコードの外にあり、導入ごとに定めます。',
+    '記録のwire版は2です。稼働中の導入がないため、以前のスナップショットは移行せず拒否します。',
     'ビルドの4ゲートに通ることは、暗号・金融・状態機械・ホスト・接続の独立した監査の代わりになりません。',
   ],
-  'gates': ['cargo test --workspace --locked', 'cargo clippy --workspace --all-targets --locked -- -D warnings', 'cargo fmt --all -- --check', 'cargo build --workspace --release --locked'],
-  'gates_note': '# 4つのゲート。Linux、固定した依存グラフで',
+  'gates': ['cargo test --workspace --locked', 'cargo clippy --workspace --all-targets --locked -- -D warnings', 'cargo fmt --all -- --check', 'cargo build --workspace --release --locked', 'cargo tree -p aethel --edges normal   # zkfmi, zkpi, defmi, deccp, dekyx なし'],
+  'gates_note': '# 4つのゲート。Linux、固定した依存グラフで · 最終実行 2026-09-13、rust 1.97、74テスト',
 
   'f_tag': '支払ストリームを、組み合わせる。',
-  'f_note': 'Aethelは、zkFMI体系の支払ストリーム債権アプリケーションです。開発:',
+  'f_note': 'Aethelは、zkFMIでもattestedレールでも決済できる支払ストリーム債権アプリケーションです。開発:',
   'skip': '本文へ移動', 'lang': 'EN', 'lang_href': '../', 'lang_code': 'en', 'navlabel': 'メイン',
  },
 }
@@ -312,6 +332,9 @@ def render(lang):
     fail = ''.join(f'<li>{escape(s)}</li>' for s in d['fail'])
     acc = ''.join(f'<li>{escape(s)}</li>' for s in d['acc'])
     limits = ''.join(f'<li>{escape(s)}</li>' for s in d['limits'])
+    rails = ''.join(f'<article class="cardx {cls}"><h3>{escape(t)}</h3><code class="crate">{escape(c)}</code><p>{escape(b)}</p></article>' for t, c, b, cls in d['rails'])
+    ports = ''.join(f'<div class="port"><code>{escape(n)}</code><p>{escape(q)}</p></div>' for n, q in d['ports'])
+    rail_chips = ''.join(f'<span class="chip">{escape(c)}</span>' for c in d['rail_chips'])
     gates = f'<span>{escape(d["gates_note"])}</span><br>' + '<br>'.join(escape(g) for g in d['gates'])
     return f'''<!doctype html>
 <html lang="{lang}">
@@ -383,7 +406,14 @@ def render(lang):
 <div class="conf">{conf}</div>
 </div></section>
 
-<section class="section" id="pilot"><div class="wrap">
+<section class="section" id="rails"><div class="wrap">
+<div class="head"><p class="eyebrow">{escape(d['rail_eb'])}</p><div><h2>{escape(d['rail_h2'])}</h2><p>{escape(d['rail_p'])}</p></div></div>
+<div class="rails">{rails}</div>
+<div class="ports">{ports}</div>
+<div class="chips">{rail_chips}</div>
+</div></section>
+
+<section class="section bg-2" id="pilot"><div class="wrap">
 <div class="head"><p class="eyebrow">{escape(d['pilot_eb'])}</p><div><h2>{escape(d['pilot_h2'])}</h2><p>{escape(d['pilot_p'])}</p></div></div>
 <div class="pilot">
 <div class="pane"><h3>{escape(d['scen_h'])}</h3><ol>{scen}</ol></div>
@@ -393,7 +423,7 @@ def render(lang):
 <div class="actions pilot-actions"><a class="btn primary" href="{POC}">{escape(d['pilot_a'])} <span class="arr">↗</span></a><a class="btn" href="{REPO}">{escape(d['pilot_b'])} <span class="arr">↗</span></a><a class="btn" href="{zk}docs/aethel.html">{escape(d['pilot_c'])} <span class="arr">↗</span></a></div>
 </div></section>
 
-<section class="section bg-2" id="status"><div class="wrap">
+<section class="section" id="status"><div class="wrap">
 <div class="head"><p class="eyebrow">{escape(d['st_eb'])}</p><div><h2>{escape(d['st_h2'])}</h2></div></div>
 <ul class="limits">{limits}</ul>
 <pre class="gates">{gates}</pre>

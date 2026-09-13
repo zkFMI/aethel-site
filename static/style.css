@@ -196,13 +196,21 @@ footer .end{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:1.2rem 2rem;padding
 footer .end span{margin-right:auto}
 footer .end a:hover{color:var(--ink)}
 
+/* rails --------------------------------------------------------------- */
+.rails{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
+.rails .crate{font-family:var(--mono);font-size:.78rem;color:var(--ink-3);letter-spacing:.02em}
+.ports{margin-top:1.2rem;display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
+.port{background:var(--bg-2);border:1px solid var(--line);border-radius:var(--r);padding:1.2rem 1.4rem;display:flex;flex-direction:column;gap:.5rem}
+.port code{font-family:var(--mono);font-size:.82rem;color:var(--blue)}
+.port p{margin:0;color:var(--ink-2);font-size:.93rem}
+
 /* responsive ----------------------------------------------------------- */
 @media(max-width:1000px){
   .hero-grid{grid-template-columns:1fr}
   .cards,.conf{grid-template-columns:1fr 1fr}
   .stages{grid-template-columns:1fr 1fr 1fr}
   .head{grid-template-columns:1fr;gap:.5rem}
-  .pilot,.limits{grid-template-columns:1fr}
+  .pilot,.limits,.rails,.ports{grid-template-columns:1fr}
 }
 @media(max-width:700px){
   .wrap{width:calc(100% - 2.5rem)}
