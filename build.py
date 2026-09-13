@@ -27,11 +27,11 @@ def wm():
 COPY = {
  'en': {
   'title': 'Aethel — the payment stream is the receivable',
-  'description': 'Aethel turns a payment stream both parties have signed into a receivable that independent credit assessors, guarantors, liquidity providers and servicers act on with separately signed authority, and settles it through zkFMI without holding the cash.',
+  'description': 'Aethel turns a payment stream both parties have signed into a receivable that independent credit assessors, guarantors, liquidity providers and servicers act on with separately signed authority, and settles it through a pluggable settlement rail, zkFMI first, without holding the cash.',
   'nav': [('product', 'Product'), ('lifecycle', 'Lifecycle'), ('providers', 'Providers'), ('boundaries', 'Boundaries'), ('pilot', 'Pilot'), ('status', 'Status')],
   'eyebrow': 'Aethel · a zkFMI application', 'by': 'by æmeth',
   'h1': 'The payment stream is the receivable.',
-  'lede': 'Aethel takes a payment stream that both parties have signed and turns it into a receivable that independent credit assessors, guarantors, liquidity providers and servicers can act on, each with its own signed authority. It settles through zkFMI and never holds the cash.',
+  'lede': 'Aethel takes a payment stream that both parties have signed and turns it into a receivable that independent credit assessors, guarantors, liquidity providers and servicers can act on, each with its own signed authority. It settles through a pluggable settlement rail, zkFMI being the first, and never holds the cash.',
   'cta': 'See the lifecycle', 'cta2': 'Enterprise PoC guide',
   'side_b': 'Built for the teams who run origination, credit, funding and servicing.',
   'side': 'Nothing here is a marketplace or a lender. Aethel is the state machine those teams plug their own providers into, and the record they can audit afterwards.',
@@ -94,7 +94,7 @@ COPY = {
   'conf': [
     ('Anonymous qualification', 'A series can require a DeKYX presentation before a decision or guarantee is accepted. It is bound to this domain, action, artifact statement, nonce and expiry, so a proof for one decision cannot be replayed for another. Aethel keeps only the verified subject-line binding, never a legal name.', 'blue'),
     ('Confidential cover', 'The guarantee amount may stay confidential. Aethel and DeCCP then exchange commitments, state digests, identifiers and verified transition receipts instead of a plaintext amount.', 'amber'),
-    ('Settlement with evidence', 'Issuance and claims become typed zkPI instructions. DeFMI settles; the host validates the evidence; only then does Aethel move to its final state. It never advances on its own say-so.', 'teal'),
+    ('Settlement with evidence', 'Issuance, releases and claims are verified by the settlement rail before the book moves. On zkFMI they become typed zkPI instructions that DeFMI settles; on the attested rail an operator-signed settlement is the witness. Aethel never advances on its own say-so.', 'teal'),
   ],
 
   'pilot_eb': 'Enterprise PoC', 'pilot_h2': 'Run it with your own roles, your own keys, and the failures you expect.',
@@ -110,7 +110,7 @@ COPY = {
   'st_eb': 'Status and limits', 'st_h2': 'A research implementation, with the edges marked.',
   'limits': [
     'Not audited for production use.',
-    'Aethel is an embeddable state machine, not a server. The host application supplies authenticated APIs, persistence, concurrency control, key management and the adapters to DeKYX, DeCCP, zkPI and DeFMI.',
+    'Aethel is an embeddable state machine, not a server. The host application supplies authenticated APIs, persistence, concurrency control, key management, and a settlement rail and qualification port. The repository ships two of each: zkFMI (zkPI, DeFMI, DeCCP, DeKYX) and an attested rail backed by operator-signed records that depends on no zkFMI crate.',
     'Qualification is scope-pseudonymous, not issuer-unlinkable. Cross-issuer anti-Sybil policy is a governance decision outside the crate.',
     'Guarantee claims and releases are full-cover transitions; partial cover needs an extended state model.',
     'Legal assignment, perfection, tax, accounting and bankruptcy treatment of a receivable are outside the code and specific to each deployment.',
@@ -125,11 +125,11 @@ COPY = {
  },
  'ja': {
   'title': 'Aethel — 支払の流れが、そのまま債権になる',
-  'description': 'Aethelは、両当事者が署名した支払ストリームを債権に変え、独立した与信評価者・保証者・資金供給者・回収管理者がそれぞれ署名した権限で関わる仕組みです。決済はzkFMIで行い、Aethel自身は資金を保有しません。',
+  'description': 'Aethelは、両当事者が署名した支払ストリームを債権に変え、独立した与信評価者・保証者・資金供給者・回収管理者がそれぞれ署名した権限で関わる仕組みです。決済は差し替え可能な決済レール（最初はzkFMI）で行い、Aethel自身は資金を保有しません。',
   'nav': [('product', 'プロダクト'), ('lifecycle', '債権の流れ'), ('providers', '提供者の権限'), ('boundaries', '正本の所在'), ('pilot', '企業PoC'), ('status', '現状と限界')],
   'eyebrow': 'Aethel · zkFMI アプリケーション', 'by': 'æmeth 開発',
   'h1': '支払の流れが、そのまま債権になる。',
-  'lede': 'Aethelは、両当事者が署名した支払ストリームを債権に変えます。独立した与信評価者・保証者・資金供給者・回収管理者が、それぞれ自分で署名した権限の範囲で関わります。決済はzkFMIで行い、Aethel自身は資金を保有しません。',
+  'lede': 'Aethelは、両当事者が署名した支払ストリームを債権に変えます。独立した与信評価者・保証者・資金供給者・回収管理者が、それぞれ自分で署名した権限の範囲で関わります。決済は差し替え可能な決済レール（最初はzkFMI）で行い、Aethel自身は資金を保有しません。',
   'cta': '債権の流れを見る', 'cta2': '企業向けPoCガイド',
   'side_b': '債権の組成・与信・資金供給・回収を実際に担当するチームのために。',
   'side': 'ここにあるのは、マーケットプレイスでも貸し手でもありません。担当チームが自社の提供者を接続する状態機械であり、あとから監査できる記録です。',
@@ -192,7 +192,7 @@ COPY = {
   'conf': [
     ('匿名の資格確認', '判断や保証を受理する前に、シリーズがDeKYXの提示を必須にできます。提示はこのドメイン・行為・成果物の文・nonce・期限に結び付くので、ある判断のための証明を別の判断へ使い回せません。Aethelは検証済みの主体参照だけを持ち、法的名称は持ちません。', 'blue'),
     ('秘匿された保証', '保証額は秘匿できます。その場合、AethelとDeCCPは平文の金額ではなく、commitment・状態ダイジェスト・識別子・検証済みの遷移receiptを交換します。', 'amber'),
-    ('証跡と引き換えの決済', '発行と請求は型付きのzkPI指図になります。DeFMIが決済し、ホストが証跡を検証し、その後で初めてAethelが最終状態へ進みます。自分の判断だけで先へ進むことはありません。', 'teal'),
+    ('証跡と引き換えの決済', '発行・解放・請求は、Bookが動く前に決済レールが検証します。zkFMIでは型付きのzkPI指図になりDeFMIが決済し、attestedレールではオペレーターが署名した決済記録が証跡になります。Aethelが自分の判断だけで先へ進むことはありません。', 'teal'),
   ],
 
   'pilot_eb': '企業向けPoC', 'pilot_h2': '自社の役割と鍵で動かし、想定する失敗をぶつける。',
@@ -208,7 +208,7 @@ COPY = {
   'st_eb': '現状と限界', 'st_h2': '研究実装。境界は明記してある。',
   'limits': [
     '本番利用に向けた監査は未実施です。',
-    'Aethelは組み込み可能な状態機械であり、サーバーではありません。認証済みAPI、永続化、同時実行制御、鍵管理、DeKYX・DeCCP・zkPI・DeFMIへのadapterはホストアプリケーションが用意します。',
+    'Aethelは組み込み可能な状態機械であり、サーバーではありません。認証済みAPI、永続化、同時実行制御、鍵管理、そして決済レールと資格確認ポートはホストアプリケーションが用意します。リポジトリには2組が入っています。zkFMI（zkPI・DeFMI・DeCCP・DeKYX）と、オペレーターの署名付き記録を証跡にする、zkFMIに依存しないattestedレールです。',
     '資格確認はスコープ内の仮名性であり、発行者間の非連結性はありません。発行者をまたぐSybil対策はクレートの外のガバナンス判断です。',
     '保証請求と解放は全額を対象とする遷移です。部分保証には拡張した状態モデルが必要です。',
     '債権譲渡の法的効力、対抗要件、税務、会計、倒産時の取扱いはコードの外にあり、導入ごとに定めます。',
